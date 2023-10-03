@@ -77,8 +77,9 @@ function Panel() {
                 <div className="controls">
                     <label htmlFor="name">Your name</label>
                     <input id="name" name="name" onChange={handleNameTyping}></input>
-                    <p>{status}</p>
                     <button onClick={startChat}>Start</button>
+                    <p>{status}</p>
+                    
                 </div>
             }
             {
