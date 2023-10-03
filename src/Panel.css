@@ -9,8 +9,24 @@
 
 input {
     background-color: #f4ebd0;
+    color: black;
     padding: 10px;
     border-radius: 10px;
+}
+
+#users {
+    display: grid;
+    gap: 1;
+    grid-template-columns: auto;
+}
+
+#users li {
+    border-radius: 5px;
+    padding: 5px;
+    list-style: none;
+    background-color: #f4ebd0;
+    max-width: 50px;
+
 }
 
 #messages {

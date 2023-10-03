@@ -7,7 +7,7 @@ function Panel() {
 
     const [chatStarted, setChatStarted] = useState(false);
 
-    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
 
     const [status, setStatus] = useState("");
 
@@ -17,29 +17,34 @@ function Panel() {
 
     const [users, setUsers] = useState<User[]>([]);
 
-    function startChat() {
-        if (name.length === 0) {
+    const startChat = () => {
+        if (username.length === 0) {
             setStatus("Please enter your name");
             setTimeout(() => {
                 setStatus("");
             }, 2000);
         } else {
             console.log("Yay, this works");
+
+            // TODO: assign ID when creating the socket
+            const newUser: User = {
+                name: username,
+                id: "",
+                isTyping: false
+            }
+            setUsers(users => ([...users, newUser]));
             setChatStarted(true);
         }
         
     }
 
-    function resetPanel() {
+    const resetPanel = () => {
         setChatStarted(false);
     }
 
     const handleNameTyping = (e: { target: { value: any; name: any; }; }) => {
-        const {value, name} = e.target; 
-        setName({ 
-          ...name, 
-          [name]: value
-        })
+        const {value} = e.target; 
+        setUsername(value);
     }
 
     const onType = (e: { target: { value: any; keycode: any; }; }) => {
@@ -64,7 +69,9 @@ function Panel() {
 
     const displayUser = (user: User) => {
         return (
-            <li>{user.name}</li>
+            <>
+                <li key={user.id}>{user.name}</li>
+            </>
         )
     }
 
