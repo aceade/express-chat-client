@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ChatMessage } from "./messages/message";
+import { Greeting, ChatMessage, UserStatusMessage, TypingMessage } from "./messages/message";
 import { User } from "./users/user";
+import Client from "./chatClient/Client";
 import "./Panel.css";
 
 function Panel() {
@@ -17,28 +18,48 @@ function Panel() {
 
     const [users, setUsers] = useState<User[]>([]);
 
-    const startChat = () => {
-        if (username.length === 0) {
-            setStatus("Please enter your name");
-            setTimeout(() => {
-                setStatus("");
-            }, 2000);
-        } else {
-            console.log("Yay, this works");
-
-            // TODO: assign ID when creating the socket
+    const client = new Client({
+        newChatListener: (msg: Greeting) => {
             const newUser: User = {
                 name: username,
-                id: "",
+                id: msg.id,
                 isTyping: false
             }
             setUsers(users => ([...users, newUser]));
+        },
+        newChatMessageListener: (msg: ChatMessage) => {
+            setMessages([...messages,msg]);
+        },
+        typingListener: (msg: TypingMessage) => {
+            showStatusMessage(`${msg.sender} is typing...`);
+        },
+        usersListener: (msg: UserStatusMessage) => {
+            showStatusMessage(`${msg.sender} is ${msg.status}`);
+            setUsers(msg.users);
+        },
+    });
+
+    const showStatusMessage = (msg: string) => {
+        setStatus(msg);
+        setTimeout(() => {
+            setStatus("");
+        }, 2000);
+    }
+
+    const startChat = () => {
+        if (username.length === 0) {
+            showStatusMessage("Please enter your name");
+        } else {
+            console.log("Yay, this works");
+
             setChatStarted(true);
+            client.startChat();
         }
         
     }
 
     const resetPanel = () => {
+        client.leaveChat();
         setChatStarted(false);
     }
 
@@ -52,12 +73,14 @@ function Panel() {
         if (keycode === 13) {
             sendMessage();
         } else {
+            client.sendIsTyping(username);
             setUserMessage(value);
         }
     }
 
     const sendMessage = () => {
         console.info("Sending", userMessage);
+        client.sendChatMessage(userMessage, username);
         setUserMessage("");
     }
 
@@ -92,6 +115,7 @@ function Panel() {
             {
                 chatStarted &&
                 <div>
+                    <button onClick={resetPanel}>X</button>
                     <div id="messages">
                         {messages.map((message) => buildMessage(message))}
                     </div>
