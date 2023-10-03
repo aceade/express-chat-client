@@ -16,15 +16,15 @@ export default class Client {
 
     constructor(handlers: HandlerMethods) {
         this.handlers = handlers;
+        this.socket = io("http://localhost:8080");
+        this.socket.on(ChatEvent.chatMessage, this.handlers.newChatMessageListener);
+        this.socket.on(ChatEvent.typing, this.handlers.typingListener);
+        this.socket.on(ChatEvent.typing, this.handlers.usersListener);
+        this.socket.on(ChatEvent.greeting, this.handlers.newChatListener);
     }
 
     public startChat() {
-        this.socket = io("http://localhost:8080");
-        console.info(this.socket);
-        this.socket.on(ChatEvent.chatMessage.toString(), this.handlers.newChatMessageListener);
-        this.socket.on(ChatEvent.typing.toString(), this.handlers.typingListener);
-        this.socket.on(ChatEvent.typing.toString(), this.handlers.usersListener);
-        this.socket.on(ChatEvent.greeting.toString(), this.handlers.newChatListener);
+        this.socket.open();
     }
 
     public leaveChat() {
@@ -32,7 +32,7 @@ export default class Client {
     }
 
     sendMessage(event: ChatEvent, message: BaseMessage) {
-        this.socket.emit(event.toString(), message);
+        this.socket.emit(event, message);
     }
 
     public sendNewUser(name: string) {

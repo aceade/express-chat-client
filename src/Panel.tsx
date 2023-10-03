@@ -26,6 +26,7 @@ function Panel() {
                 isTyping: false
             }
             setUsers(users => ([...users, newUser]));
+            client.sendNewUser(username);
         },
         newChatMessageListener: (msg: ChatMessage) => {
             setMessages([...messages,msg]);
@@ -53,7 +54,7 @@ function Panel() {
             console.log("Yay, this works");
 
             setChatStarted(true);
-            client.startChat();
+            // client.sendNewUser(username);
         }
         
     }
