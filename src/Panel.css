@@ -1,0 +1,15 @@
+
+#wrapper {
+    background-color: #122620;
+    color: #b68d40;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+input {
+    background-color: #f4ebd0;
+}
+
+#messages {
+    min-height: 300px;
+}
