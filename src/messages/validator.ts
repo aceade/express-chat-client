@@ -2,7 +2,7 @@
  * A series of example validation methods.
  */
 
-import { ChatMessage } from "./message";
+import { ChatMessage } from "./messages";
 
 const badWords = ["spam", "Turscar"];
 

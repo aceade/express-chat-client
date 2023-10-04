@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Greeting, ChatMessage, UserStatusMessage, TypingMessage } from "./messages/message";
+import { Greeting, ChatMessage, UserStatusMessage, TypingMessage, DisplayMessage } from "./messages/messages";
 import { User } from "./users/user";
 import Client from "./chatClient/Client";
 import "./Panel.css";
@@ -14,7 +14,7 @@ function Panel() {
 
     const [userMessage, setUserMessage] = useState("");
 
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<DisplayMessage[]>([]);
 
     const [users, setUsers] = useState<User[]>([]);
 
@@ -46,7 +46,13 @@ function Panel() {
     }
 
     const appendChatMessage = (msg: ChatMessage, fromMe = false) => {
-        setMessages([...messages, msg]);
+        let displayMessage: DisplayMessage = {
+            message: msg.message,
+            sender: msg.sender,
+            fromMe: fromMe
+        }
+        // append using the spread operator
+        setMessages(messages => [...messages, displayMessage]);
     }
 
     const showStatusMessage = (msg: string) => {
@@ -89,14 +95,17 @@ function Panel() {
 
     const sendMessage = () => {
         console.info("Sending", userMessage);
-        let msg: ChatMessage = client.sendChatMessage(userMessage, username);
-        appendChatMessage(msg, true);
+        let msg = client?.sendChatMessage(userMessage, username);
         setUserMessage("");
+        if (msg) {
+            appendChatMessage(msg, true);
+        }
+
     }
 
-    const buildMessage = (message:ChatMessage) => {
+    const buildMessage = (message:DisplayMessage) => {
         return (
-            <p>{`${message.sender}: ${message.message}`}</p>
+            <p className={message.fromMe ? "fromMe" : "fromServer"}>{`${message.sender}: ${message.message}`}</p>
         )
     }
 

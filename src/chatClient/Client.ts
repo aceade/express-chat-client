@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { ChatEvent } from "../messages/event";
-import { BaseMessage, ChatMessage } from "../messages/message";
+import { BaseMessage, ChatMessage } from "../messages/messages";
 
 export interface HandlerMethods {
     newChatMessageListener: any,

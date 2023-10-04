@@ -25,3 +25,7 @@ export interface UserStatusMessage extends BaseMessage {
     users: User[];
     status: UserStatus;
 }
+
+export interface DisplayMessage extends ChatMessage {
+    fromMe: boolean;
+}
