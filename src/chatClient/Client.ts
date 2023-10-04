@@ -15,6 +15,7 @@ export default class Client {
     handlers: HandlerMethods;
 
     constructor(handlers: HandlerMethods) {
+        console.info("New client!");
         this.handlers = handlers;
         this.socket = io("http://localhost:8080");
         this.socket.on(ChatEvent.chatMessage, this.handlers.newChatMessageListener);
@@ -24,7 +25,7 @@ export default class Client {
     }
 
     public startChat() {
-        this.socket.open();
+        // this.socket.open();
     }
 
     public leaveChat() {
@@ -55,6 +56,7 @@ export default class Client {
             sender: name
         };
         this.sendMessage(ChatEvent.chatMessage, msg);
+        return msg;
     }
 
 }

@@ -18,27 +18,36 @@ function Panel() {
 
     const [users, setUsers] = useState<User[]>([]);
 
-    const client = new Client({
-        newChatListener: (msg: Greeting) => {
-            const newUser: User = {
-                name: username,
-                id: msg.id,
-                isTyping: false
-            }
-            setUsers(users => ([...users, newUser]));
-            client.sendNewUser(username);
-        },
-        newChatMessageListener: (msg: ChatMessage) => {
-            setMessages([...messages,msg]);
-        },
-        typingListener: (msg: TypingMessage) => {
-            showStatusMessage(`${msg.sender} is typing...`);
-        },
-        usersListener: (msg: UserStatusMessage) => {
-            showStatusMessage(`${msg.sender} is ${msg.status}`);
-            setUsers(msg.users);
-        },
-    });
+    const [client, setClient] = useState<Client>();
+
+    const buildClient = () => {
+        let client = new Client({
+            newChatListener: (msg: Greeting) => {
+                const newUser: User = {
+                    name: username,
+                    id: msg.id,
+                    isTyping: false
+                }
+                setUsers(users => ([...users, newUser]));
+                client.sendNewUser(username);
+            },
+            newChatMessageListener: (msg: ChatMessage) => {
+                appendChatMessage(msg);
+            },
+            typingListener: (msg: TypingMessage) => {
+                showStatusMessage(`${msg.sender} is typing...`);
+            },
+            usersListener: (msg: UserStatusMessage) => {
+                showStatusMessage(`${msg.sender} is ${msg.status}`);
+                setUsers(msg.users);
+            },
+        });
+        setClient(client);
+    }
+
+    const appendChatMessage = (msg: ChatMessage, fromMe = false) => {
+        setMessages([...messages, msg]);
+    }
 
     const showStatusMessage = (msg: string) => {
         setStatus(msg);
@@ -52,15 +61,14 @@ function Panel() {
             showStatusMessage("Please enter your name");
         } else {
             console.log("Yay, this works");
-
+            buildClient();
             setChatStarted(true);
-            // client.sendNewUser(username);
         }
         
     }
 
     const resetPanel = () => {
-        client.leaveChat();
+        client?.leaveChat();
         setChatStarted(false);
     }
 
@@ -74,14 +82,15 @@ function Panel() {
         if (keycode === 13) {
             sendMessage();
         } else {
-            client.sendIsTyping(username);
+            client?.sendIsTyping(username);
             setUserMessage(value);
         }
     }
 
     const sendMessage = () => {
         console.info("Sending", userMessage);
-        client.sendChatMessage(userMessage, username);
+        let msg: ChatMessage = client.sendChatMessage(userMessage, username);
+        appendChatMessage(msg, true);
         setUserMessage("");
     }
 
@@ -121,7 +130,7 @@ function Panel() {
                         {messages.map((message) => buildMessage(message))}
                     </div>
                     <ul id="users">
-                        {users.map(user => displayUser(user))}
+                        {users && users.map(user => displayUser(user))}
                     </ul>
                     <div className="controls">
                         <input name="messageInput" id="messageInput" onChange={(e) => onType(e)}></input>
