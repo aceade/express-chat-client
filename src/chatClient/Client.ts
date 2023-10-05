@@ -6,7 +6,8 @@ export interface HandlerMethods {
     newChatMessageListener: any,
     typingListener: any,
     usersListener: any,
-    newChatListener: any
+    newChatListener: any,
+    errorHandler: any
 }
 
 export default class Client {
@@ -17,11 +18,16 @@ export default class Client {
     constructor(handlers: HandlerMethods) {
         console.info("New client!");
         this.handlers = handlers;
-        this.socket = io("http://localhost:8080");
+        this.socket = io("http://localhost:8080", {
+            auth: {
+                token: import.meta.env.VITE_TOKEN
+            }
+        });
         this.socket.on(ChatEvent.chatMessage, this.handlers.newChatMessageListener);
         this.socket.on(ChatEvent.typing, this.handlers.typingListener);
         this.socket.on(ChatEvent.typing, this.handlers.usersListener);
         this.socket.on(ChatEvent.greeting, this.handlers.newChatListener);
+        this.socket.on("connect_error", this.handlers.errorHandler);
     }
 
     public startChat() {
