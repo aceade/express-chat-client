@@ -20,7 +20,7 @@ export default class Client {
         this.handlers = handlers;
         this.socket = io("http://localhost:8080", {
             auth: {
-                token: process.env.TOKEN
+                token: import.meta.env.VITE_TOKEN
             }
         });
         this.socket.on(ChatEvent.chatMessage, this.handlers.newChatMessageListener);

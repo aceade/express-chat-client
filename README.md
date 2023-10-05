@@ -21,13 +21,13 @@ Depending on your package manager:
 
 ### pnpm
 
-- `echo "TOKEN=\"${token}\"" > .env `
+- `echo "VITE_TOKEN=\"${token}\"" > .env `
 - `pnpm install`
 - `pnpm run dev`
 
 ### npm
 
-- `echo "TOKEN=\"${token}\"" > .env `
+- `echo "VITE_TOKEN=\"${token}\"" > .env `
 - `npm install`
 - `npm run dev`
 
