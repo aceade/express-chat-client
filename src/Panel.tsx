@@ -40,7 +40,14 @@ function Panel() {
             usersListener: (msg: UserStatusMessage) => {
                 showStatusMessage(`${msg.sender} is ${msg.status}`);
                 setUsers(msg.users);
-            },
+            }, errorHandler: (err: Error) => {
+                console.error(err);
+                showStatusMessage(`Unable to connect: ${err}`);
+                appendChatMessage({
+                    message: `Unable to connect! ${err}`,
+                    sender: "Server"
+                }, true);
+            }
         });
         setClient(client);
     }
@@ -141,6 +148,7 @@ function Panel() {
                     <ul id="users">
                         {users && users.map(user => displayUser(user))}
                     </ul>
+                    <p>{status}</p>
                     <div className="controls">
                         <input name="messageInput" id="messageInput" onChange={(e) => onType(e)}></input>
                         <button onClick={sendMessage}>Send</button>

@@ -14,3 +14,23 @@ A React practice project to go with [an Express chat backend](https://github.com
 | disconnection | UserStatusMessage |
 | connection | - (no message) |
 | newUser | BaseMessage |
+
+## Running locally
+
+Depending on your package manager:
+
+### pnpm
+
+- `echo "TOKEN=\"${token}\"" > .env `
+- `pnpm install`
+- `pnpm run dev`
+
+### npm
+
+- `echo "TOKEN=\"${token}\"" > .env `
+- `npm install`
+- `npm run dev`
+
+## Authentication
+
+The auth token is included in the environment variables **for testing only**. In practice, a better mechanism would be to make e.g. a REST call to the backend to request a token and then use that.
