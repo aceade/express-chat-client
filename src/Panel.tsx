@@ -140,7 +140,7 @@ function Panel() {
             }
             {
                 chatStarted &&
-                <div>
+                <div id="chatPanel">
                     <button onClick={resetPanel}>X</button>
                     <div id="messages">
                         {messages.map((message) => buildMessage(message))}
@@ -150,6 +150,7 @@ function Panel() {
                     </ul>
                     <p>{status}</p>
                     <div className="controls">
+                        <label htmlFor="messageInput">Your message</label>
                         <input name="messageInput" id="messageInput" onChange={(e) => onType(e)}></input>
                         <button onClick={sendMessage}>Send</button>
                     </div>
