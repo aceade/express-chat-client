@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { ChatEvent } from "../messages/event";
-import { BaseMessage, ChatMessage } from "../messages/messages";
+import { BaseMessage, ChatMessage, TypingMessage } from "../messages/messages";
 
 export interface HandlerMethods {
     newChatMessageListener: any,
@@ -25,13 +25,9 @@ export default class Client {
         });
         this.socket.on(ChatEvent.chatMessage, this.handlers.newChatMessageListener);
         this.socket.on(ChatEvent.typing, this.handlers.typingListener);
-        this.socket.on(ChatEvent.typing, this.handlers.usersListener);
+        this.socket.on(ChatEvent.userList, this.handlers.usersListener);
         this.socket.on(ChatEvent.greeting, this.handlers.newChatListener);
         this.socket.on("connect_error", this.handlers.errorHandler);
-    }
-
-    public startChat() {
-        // this.socket.open();
     }
 
     public leaveChat() {
@@ -50,8 +46,9 @@ export default class Client {
     }
 
     public sendIsTyping(name: string) {
-        let msg: BaseMessage = {
-            sender: name
+        let msg: TypingMessage = {
+            sender: name,
+            id: this.socket.id
         };
         this.sendMessage(ChatEvent.typing, msg);
     }

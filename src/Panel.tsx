@@ -29,6 +29,7 @@ function Panel() {
                     isTyping: false
                 }
                 setUsers(users => ([...users, newUser]));
+                showStatusMessage(`You have entered the chat`);
                 client.sendNewUser(username);
             },
             newChatMessageListener: (msg: ChatMessage) => {
@@ -38,6 +39,7 @@ function Panel() {
                 showStatusMessage(`${msg.sender} is typing...`);
             },
             usersListener: (msg: UserStatusMessage) => {
+                console.info(msg);
                 showStatusMessage(`${msg.sender} is ${msg.status}`);
                 setUsers(msg.users);
             }, errorHandler: (err: Error) => {
