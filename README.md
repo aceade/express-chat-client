@@ -24,16 +24,14 @@ Depending on your package manager:
 
 ### pnpm
 
-- `echo "VITE_TOKEN=\"${token}\"" > .env `
 - `pnpm install`
 - `pnpm run dev`
 
 ### npm
 
-- `echo "VITE_TOKEN=\"${token}\"" > .env `
 - `npm install`
 - `npm run dev`
 
 ## Authentication
 
-The auth token is included in the environment variables **for testing only**. In practice, a better mechanism would be to make e.g. a REST call to the backend to request a token and then use that.
+The client will make a REST call to the backend for an auth token before opening the chat.
