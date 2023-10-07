@@ -3,6 +3,7 @@ import { Greeting, ChatMessage, UserStatusMessage, TypingMessage, DisplayMessage
 import { User } from "./users/user";
 import Client from "./chatClient/Client";
 import "./Panel.css";
+import { fetchToken } from "./token/fetchToken";
 
 function Panel() {
 
@@ -20,7 +21,10 @@ function Panel() {
 
     const [client, setClient] = useState<Client>();
 
-    const buildClient = () => {
+    const buildClient = async () => {
+        let host = "http://localhost:8080";
+        const token = await fetchToken(host);
+        console.info(token);
         let client = new Client({
             newChatListener: (msg: Greeting) => {
                 const newUser: User = {
@@ -50,7 +54,7 @@ function Panel() {
                     sender: "Server"
                 }, true);
             }
-        });
+        }, host, token);
         setClient(client);
     }
 

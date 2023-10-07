@@ -15,12 +15,11 @@ export default class Client {
     socket: any;
     handlers: HandlerMethods;
 
-    constructor(handlers: HandlerMethods) {
-        console.info("New client!");
+    constructor(handlers: HandlerMethods, host: string, token: string) {
         this.handlers = handlers;
-        this.socket = io("http://localhost:8080", {
+        this.socket = io(host, {
             auth: {
-                token: import.meta.env.VITE_TOKEN
+                token: token
             }
         });
         this.socket.on(ChatEvent.chatMessage, this.handlers.newChatMessageListener);
