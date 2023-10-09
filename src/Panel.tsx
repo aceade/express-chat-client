@@ -22,7 +22,7 @@ function Panel() {
     const [client, setClient] = useState<Client>();
 
     const buildClient = async () => {
-        let host = "http://localhost:8080";
+        let host = process.env.REACT_APP_CHAT_ENDPOINT || "http://localhost:8080";
         const token = await fetchToken(host);
         console.info(token);
         let client = new Client({
