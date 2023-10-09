@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Greeting, ChatMessage, UserStatusMessage, TypingMessage, DisplayMessage } from "./messages/messages";
 import { User } from "./users/user";
 import Client from "./chatClient/Client";
@@ -96,14 +96,17 @@ function Panel() {
         setUsername(value);
     }
 
-    const onType = (e: { target: { value: any; keycode: any; }; }) => {
-        const {value, keycode} = e.target;
-        if (keycode === 13) {
+    // need separate events for some reason
+    const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
+        const {code} = e;
+        if (code.toLowerCase() === "enter") {
             sendMessage();
-        } else {
-            client?.sendIsTyping(username);
-            setUserMessage(value);
-        }
+        } 
+    }
+
+    const onType = (e: ChangeEvent<HTMLInputElement>) => {
+        client?.sendIsTyping(username);
+        setUserMessage(e.target.value)
     }
 
     const sendMessage = () => {
@@ -157,7 +160,7 @@ function Panel() {
                     <p>{status}</p>
                     <div className="controls">
                         <label htmlFor="messageInput">Your message</label>
-                        <input name="messageInput" id="messageInput" onChange={(e) => onType(e)}></input>
+                        <input name="messageInput" id="messageInput" onChange={(e) => onType(e)} onKeyDown={(e) => onEnterPressed(e)}></input>
                         <button onClick={sendMessage}>Send</button>
                     </div>
                 </div>
