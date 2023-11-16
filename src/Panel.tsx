@@ -15,6 +15,7 @@ function Panel() {
 
     const [userMessage, setUserMessage] = useState("");
 
+    // could expand to reducer and allow users to delete messages
     const [messages, setMessages] = useState<DisplayMessage[]>([]);
 
     const [users, setUsers] = useState<User[]>([]);
@@ -22,10 +23,10 @@ function Panel() {
     const [client, setClient] = useState<Client>();
 
     const buildClient = async () => {
-        let host = process.env.REACT_APP_CHAT_ENDPOINT || "https://express-chat-backend.azurewebsites.net";
+        const host = process.env.REACT_APP_CHAT_ENDPOINT || "https://express-chat-backend.azurewebsites.net";
         const token = await fetchToken(host);
         console.info(token);
-        let client = new Client({
+        const client = new Client({
             newChatListener: (msg: Greeting) => {
                 const newUser: User = {
                     name: username,
@@ -59,7 +60,7 @@ function Panel() {
     }
 
     const appendChatMessage = (msg: ChatMessage, fromMe = false) => {
-        let displayMessage: DisplayMessage = {
+        const displayMessage: DisplayMessage = {
             message: msg.message,
             sender: msg.sender,
             fromMe: fromMe
@@ -111,7 +112,7 @@ function Panel() {
 
     const sendMessage = () => {
         console.info("Sending", userMessage);
-        let msg = client?.sendChatMessage(userMessage, username);
+        const msg = client?.sendChatMessage(userMessage, username);
         setUserMessage("");
         if (msg) {
             appendChatMessage(msg, true);

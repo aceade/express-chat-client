@@ -35,3 +35,7 @@ Depending on your package manager:
 ## Authentication
 
 The client will make a REST call to the backend for an auth token before opening the chat.
+
+## ESLint configuration
+
+The `@typescript-eslint/no-explicit-any` rule has been disabled due to difficulties in defining interfaces for certain parameters within the Client.ts file. All other rules are as per the default. There [is a dedicated build file](./.github/workflows/lint.yml) for this.
