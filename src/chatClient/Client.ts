@@ -38,14 +38,14 @@ export default class Client {
     }
 
     public sendNewUser(name: string) {
-        let msg: BaseMessage = {
+        const msg: BaseMessage = {
             sender: name
         };
         this.sendMessage(ChatEvent.newUser, msg);
     }
 
     public sendIsTyping(name: string) {
-        let msg: TypingMessage = {
+        const msg: TypingMessage = {
             sender: name,
             id: this.socket.id
         };
@@ -53,7 +53,7 @@ export default class Client {
     }
 
     public sendChatMessage(text: string, name: string) {
-        let msg: ChatMessage = {
+        const msg: ChatMessage = {
             message: text,
             sender: name
         };
